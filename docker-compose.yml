@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   mongodb:
     image: mongo:6.0
@@ -8,8 +7,9 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  app:
-    build: .
+  api:
+    build: 
+      context: ./api
     ports:
       - "5000:5000"
     depends_on:
@@ -17,8 +17,14 @@ services:
     environment:
       MONGO_URL: mongodb://localhost:27017/challenge
     volumes:
-      - .:/usr/src/app
+      - ./api:/usr/src/app
     command: ["npm", "run", "dev"]
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"
 
 volumes:
   mongo-data:
