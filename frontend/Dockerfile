@@ -15,14 +15,8 @@ COPY . .
 # Construir la aplicación
 RUN npm run build
 
-# Usar una imagen base para servir la aplicación
-FROM nginx:alpine
-
-# Copiar los archivos construidos al contenedor de Nginx
-COPY --from=build /app/build /usr/share/nginx/html
-
 # Exponer el puerto en el que la aplicación servirá
 EXPOSE 80
 
-# Comando para ejecutar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para iniciar nodemon, observando archivos y ejecutando el servidor de desarrollo de React
+CMD ["npx", "nodemon", "-L", "--watch", "src", "--exec", "npm start"]

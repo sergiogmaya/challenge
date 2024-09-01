@@ -1,0 +1,10 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "js,jsx,ts,tsx,json,css,scss",
+    "ignore": [
+        "node_modules"
+    ],
+    "exec": "npm start"
+}
