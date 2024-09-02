@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate  } from 'react-router-dom';
+import BackButton from './BackButton';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -27,6 +28,7 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center text-gray-700">Register</h2>
+        <BackButton />
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700">Username</label>

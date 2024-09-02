@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useJobs } from '../hooks/useJobs';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
 
 const CreateJob = () => {
   const { token } = useAuth();
@@ -21,6 +22,7 @@ const CreateJob = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-6">Create a New Crawling Job</h2>
+      <BackButton />
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="url"

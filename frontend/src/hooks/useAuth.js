@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
+//hook para manejar las llamadas a las rutas de usuarios
 export const useAuth = () => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem('token')); //obtenemos el token del navegador para usarlo en las llamadas
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  //funcion de acceso del usuario
   const login = async (email, password) => {
     setLoading(true);
     setError(null);
@@ -20,7 +22,7 @@ export const useAuth = () => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok) {  //si la respuesta es positiva, almacenamos el token
         setToken(data.token);
         localStorage.setItem('token', data.token);
       } else {
@@ -33,6 +35,7 @@ export const useAuth = () => {
     }
   };
 
+  //Funcion de registro del usuario
   const register = async (user) => {
     setLoading(true);
     setError(null);

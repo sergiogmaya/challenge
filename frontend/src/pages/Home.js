@@ -20,6 +20,9 @@ const Home = () => {
           <div className="mt-6">
             <button onClick={() => navigate('/crawler')} className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 mb-4">
               Go to Crawler
+            </button>            
+            <button onClick={() => navigate('/user')} className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-indigo-700 mb-4">
+              User Profile
             </button>
             <button onClick={handleLogout} className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700">
               Logout

@@ -10,9 +10,10 @@ const JobList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchJobs();
+    fetchJobs();  //Llamamos al hook que nos traiga los trabajos del usuario
   }, [fetchJobs]);
 
+  //Declaramos el click para visitar el detalle del trabajo
   const handleJobClick = (jobId) => {
     navigate(`/crawler/jobs/${jobId}`);
   };
@@ -24,6 +25,7 @@ const JobList = () => {
       {loading && <p>Loading jobs...</p>}
       {error && <p className="text-red-500">{error}</p>}
       <ul className="space-y-4">
+        {/* Listados de trabajos */}
         {jobs.map((job) => (
           <li
             key={job._id}

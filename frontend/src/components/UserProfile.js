@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BackButton from './BackButton';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -38,6 +39,7 @@ const UserProfile = () => {
           localStorage.removeItem('token');
           // Redirigir al login o hacer logout
         }}>Logout</button>
+        <BackButton />
       </div>
     </div>
   );

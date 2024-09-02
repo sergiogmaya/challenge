@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
 
+//hook para le manejo de las llamadas a trabajos
 export const useJobs = (token) => {
   const [jobs, setJobs] = useState([]);
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  //Funcion para obtener los trabajos, manejando el callback para evitar bucles
   const fetchJobs = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -31,6 +33,7 @@ export const useJobs = (token) => {
     }
   }, [token]);
 
+  //funcion para la creacion de trabajos
   const createJob = useCallback(async (url) => {
     setLoading(true);
     setError(null);
@@ -60,6 +63,8 @@ export const useJobs = (token) => {
     }
   }, [token, fetchJobs]);
 
+  
+  //funcion para la comprobar los trabajos
   const fetchJobStatus = useCallback(async (jobId) => {
     setLoading(true);
     setError(null);
@@ -85,6 +90,7 @@ export const useJobs = (token) => {
     }
   }, [token]);
 
+  //funcion que comienza el crawler del trabajo
   const startCrawling = useCallback(async (jobId) => {
     setLoading(true);
     setError(null);

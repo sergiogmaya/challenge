@@ -10,8 +10,21 @@ const JobDetails = () => {
   const { job, fetchJobStatus, startCrawling, loading, error } = useJobs(token);
 
   useEffect(() => {
-    fetchJobStatus(jobId);
-  }, [fetchJobStatus, jobId]);
+    // Función para obtener el estado del trabajo
+    const fetchStatus = () => {
+      fetchJobStatus(jobId);
+    };
+
+    // Llamar inmediatamente para obtener el estado al montar el componente
+    fetchStatus();
+
+    // Establecer un intervalo solo si el estado del trabajo no es 'completed'
+    if (job?.status !== 'completed') {
+      const intervalId = setInterval(fetchStatus, 3000);
+      // Limpiar el intervalo cuando el componente se desmonta
+      return () => clearInterval(intervalId);
+    }
+  }, [fetchJobStatus, jobId, job?.status]);
 
   const handleStartCrawling = async () => {
     await startCrawling(jobId);
