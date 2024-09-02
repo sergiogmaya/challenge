@@ -25,6 +25,9 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
     const { email, password } = req.body;
 
+
+
+    
     try {
         const user = await User.findOne({ email });
         if (!user || !(await user.comparePassword(password))) {

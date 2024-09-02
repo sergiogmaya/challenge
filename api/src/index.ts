@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import userRoutes from './routes/user';
+import crawlerRoutes from './routes/crawler';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 
@@ -44,6 +45,8 @@ app.get('/', (_req, _res) => {
 })
 // Rutas de usuario
 app.use('/api/users', userRoutes);
+//Rutas del crawler
+app.use('/api/crawler', crawlerRoutes);
 
 app.listen(5000, '0.0.0.0', () => {
     console.log('Server running on port 5000');
