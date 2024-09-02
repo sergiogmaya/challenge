@@ -25,8 +25,8 @@ app.use(cors({
 
 //Limitamos las peticiones a nuestro servidor
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100
+  windowMs: 15 * 60 * 1000,
+  max: 100
 });
 
 app.use(limiter);
@@ -34,22 +34,24 @@ app.use(limiter);
 
 //Conexión a nuestra base de datos local
 mongoose.connect('mongodb://mongodb:27017/challenge').then(() => {
-    console.log('MongoDB connected');
+  console.log('MongoDB connected');
 }).catch((error) => {
-    console.error('MongoDB connection error:', error);
+  console.error('MongoDB connection error:', error);
 });
 
 //Prueba de funcionamiento de la api
 app.get('/', (_req, _res) => {
-    _res.send('OK')
+  _res.send('OK')
 })
 // Rutas de usuario
 app.use('/api/users', userRoutes);
 //Rutas del crawler
 app.use('/api/crawler', crawlerRoutes);
 
-app.listen(5000, '0.0.0.0', () => {
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(5000, '0.0.0.0', () => {
     console.log('Server running on port 5000');
-});
+  });
+}
 
 export default app;
