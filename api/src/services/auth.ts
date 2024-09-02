@@ -3,6 +3,7 @@ import { IUser } from '../models/User';
 
 const secretKey = process.env.SECRET || 'your_secret_key';
 
+//Funcion para generar el token que mandamos al frontend
 export const generateToken = (user: IUser): string => {
     return jwt.sign(
         {
@@ -15,6 +16,7 @@ export const generateToken = (user: IUser): string => {
     );
 };
 
+//Funcion para verificar el token que nos manda el frontend
 export const verifyToken = (token: string): any => {
     try {
         return jwt.verify(token, secretKey);

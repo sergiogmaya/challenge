@@ -31,7 +31,6 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-
 //Conexión a nuestra base de datos local
 mongoose.connect('mongodb://mongodb:27017/challenge').then(() => {
   console.log('MongoDB connected');
@@ -43,6 +42,7 @@ mongoose.connect('mongodb://mongodb:27017/challenge').then(() => {
 app.get('/', (_req, _res) => {
   _res.send('OK')
 })
+
 // Rutas de usuario
 app.use('/api/users', userRoutes);
 //Rutas del crawler

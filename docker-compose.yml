@@ -6,6 +6,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - mynetwork
 
   api:
     build: 
@@ -15,16 +17,29 @@ services:
     depends_on:
       - mongodb
     environment:
-      MONGO_URL: mongodb://localhost:27017/challenge
+      MONGO_URL: mongodb://mongodb:27017/challenge
     volumes:
       - ./api:/usr/src/app
     command: ["npm", "run", "dev"]
+    networks:
+      - mynetwork
 
   frontend:
     build:
       context: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npx", "nodemon", "-L", "--watch", "src", "--exec", "npm start"]
+    networks:
+      - mynetwork
 
 volumes:
   mongo-data:
+  
+networks:
+  mynetwork:

@@ -4,13 +4,9 @@ import { authMiddleware } from '../middlewares/auth';
 
 const router = Router();
 
-// Ruta para registrar un nuevo usuario
+// Definicion de rutas para el usuario
 router.post('/register', registerUser);
-
-// Ruta para iniciar sesión
 router.post('/login', loginUser);
-
-// Ruta para obtener la información del usuario actual (protegida)
 router.get('/me', authMiddleware, getCurrentUser);
 
 export default router;

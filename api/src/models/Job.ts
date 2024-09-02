@@ -1,21 +1,38 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Schema, Document, model } from 'mongoose';
 
-export interface IJob extends Document {
-  userId: string;
+//Definicion de la interfaz de trabajos para poder guardar sus atributos
+export interface JobDocument extends Document {
+  userId: Schema.Types.ObjectId;
   rootUrl: string;
-  status: string;
+  status: 'pending' | 'in-progress' | 'completed' | 'failed';
   urlsFound: string[];
   pendingUrls: string[];
-  createdAt: Date;
 }
 
-const JobSchema: Schema = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  rootUrl: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'in-progress', 'completed'], default: 'pending' },
-  urlsFound: { type: [String], default: [] },
-  pendingUrls: { type: [String], default: [] },
-  createdAt: { type: Date, default: Date.now },
+//Definicion de la entidad en base de datos
+const jobSchema = new Schema<JobDocument>({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  rootUrl: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'in-progress', 'completed', 'failed'],
+    default: 'pending',
+  },
+  urlsFound: {
+    type: [String],
+    default: [],
+  },
+  pendingUrls: {
+    type: [String],
+    default: [],
+  },
 });
 
-export const Job = mongoose.model<IJob>('Job', JobSchema);
+export const Job = model<JobDocument>('Job', jobSchema);

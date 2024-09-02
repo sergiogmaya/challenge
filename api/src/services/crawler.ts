@@ -1,43 +1,50 @@
-import puppeteer from 'puppeteer';
-import { IJob } from '../models/Job';
+import axios from 'axios';
+import { JSDOM } from 'jsdom';
+import { JobDocument } from '../models/Job';
 
 export class CrawlerService {
-  async startCrawling(job: IJob): Promise<void> {
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
+  async startCrawling(job: JobDocument): Promise<string[]> {
+    try {
+      const { rootUrl } = job;
 
-    const visitedUrls = new Set<string>();
-    const pendingUrls = [job.rootUrl];
-    
-    job.status = 'in-progress';
-    await job.save();
+      // Realiza una petición a la URL raíz
+      const response = await axios.get(rootUrl);
+      const html = response.data;
 
-    while (pendingUrls.length > 0) {
-      const currentUrl = pendingUrls.shift()!;
-      if (visitedUrls.has(currentUrl)) continue;
-
-      await page.goto(currentUrl, { waitUntil: 'networkidle2' });
-      visitedUrls.add(currentUrl);
-
-      const foundUrls = await page.evaluate(() => {
-        const anchors = document.querySelectorAll('a');
-        return Array.from(anchors).map(anchor => anchor.href);
-      });
-
-      for (const url of foundUrls) {
-        if (!visitedUrls.has(url) && !pendingUrls.includes(url)) {
-          pendingUrls.push(url);
-        }
+      //Comprobamos que tenga html
+      if (!html) {
+        throw new Error('No HTML content received');
       }
 
-      job.urlsFound.push(currentUrl);
-      job.pendingUrls = pendingUrls;
+      // Carga el HTML en jsdom
+      const dom = new JSDOM(html);
+      const document = dom.window.document;
+
+      // Extrae los enlaces encontrados
+      const urls: string[] = [];
+      const anchorElements = document.querySelectorAll('a');
+
+      anchorElements.forEach((element) => {
+        const href = element.getAttribute('href');
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+          const fullUrl = new URL(href, rootUrl).href; // Resuelve las URLs relativas
+          urls.push(fullUrl);
+        }
+      });
+
+      // Actualiza el job con las URLs encontradas
+      job.urlsFound = urls;
+      job.status = 'completed';
+
+      // Guarda el trabajo actualizado
       await job.save();
+
+      return urls;
+    } catch (error) {
+      console.error('Error during crawling:', error);
+      job.status = 'failed';
+      await job.save();
+      throw error;
     }
-
-    job.status = 'completed';
-    await job.save();
-
-    await browser.close();
   }
 }
